@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fastpostapp.fullname" . }}
+  labels:
+    app: {{ include "fastpostapp.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "fastpostapp.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "fastpostapp.name" . }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        env:
+      - name: DATABASE_URL
+        value: "postgresql://{{ .Values.postgres.username }}:{{ .Values.postgres.password }}@{{ .Values.postgres.externalHost }}:{{ .Values.postgres.port }}/{{ .Values.postgres.dbname }}"
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.service.port }}
+          initialDelaySeconds: 3
+          periodSeconds: 10

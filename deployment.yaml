@@ -19,7 +19,7 @@ spec:
         - containerPort: 80
         env:
         - name: DATABASE_URL
-          value: postgresql://ser:password@postgres:5432/dbname
+          value: postgresql://user:password@34.71.236.251:5432/mydb
 ---
 apiVersion: v1
 kind: Service

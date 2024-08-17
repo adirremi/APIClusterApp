@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 80
 
 # Define environment variable
-ENV DATABASE_URL=postgresql://user:password@host:port/dbname
+ENV DATABASE_URL=postgresql://user:password@34.71.236.251:port/mydb
 
 # Run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

@@ -1,0 +1,5 @@
+project_id    = "lsa-data-425320"
+region         = "us-central1"
+db_name     = "mydb"
+db_user     = "user"
+db_password = "password"
