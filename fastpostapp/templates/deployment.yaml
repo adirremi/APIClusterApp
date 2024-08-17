@@ -20,12 +20,16 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
         env:
-      - name: DATABASE_URL
-        value: "postgresql://{{ .Values.postgres.username }}:{{ .Values.postgres.password }}@{{ .Values.postgres.externalHost }}:{{ .Values.postgres.port }}/{{ .Values.postgres.dbname }}"
-
+        - name: DATABASE_URL
+          value: "postgresql://{{ .Values.postgres.username }}:{{ .Values.postgres.passwordSecretKey }}@{{ .Values.postgres.externalHost }}:{{ .Values.postgres.port }}/{{ .Values.postgres.dbname }}"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.postgres.passwordSecretName }}
+              key: {{ .Values.postgres.passwordSecretKey }}
         livenessProbe:
           httpGet:
             path: /health
             port: {{ .Values.service.port }}
-          initialDelaySeconds: 3
+          initialDelaySeconds: 5
           periodSeconds: 10

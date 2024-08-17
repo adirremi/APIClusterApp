@@ -20,3 +20,7 @@ def read_item(item_id: int):
     cur.close()
     conn.close()
     return {"item": item}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}

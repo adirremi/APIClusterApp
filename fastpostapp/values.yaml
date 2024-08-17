@@ -10,10 +10,11 @@ service:
   port: 80
 
 postgres:
-  image: postgres:13
+  externalHost: 34.71.236.251
   username: user
-  password: password
-  dbname: dbname
+  passwordSecretName: db-secret # שם הסיקרט שבו הסיסמה מאוחסנת
+  passwordSecretKey: DB_PASSWORD # המפתח בתוך הסיקרט שמחזיק את הסיסמה
+  dbname: mydb
   port: 5432
 
 resources: {}
@@ -23,3 +24,22 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+serviceAccount:
+  create: true
+  name: "tf-fastapi"
+
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80

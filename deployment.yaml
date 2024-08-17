@@ -19,7 +19,10 @@ spec:
         - containerPort: 80
         env:
         - name: DATABASE_URL
-          value: postgresql://user:password@34.71.236.251:5432/mydb
+          value: postgresql://user:$(DB_PASSWORD)@34.71.236.251:5432/mydb
+        envFrom:
+        - secretRef:
+            name: db-secret
 ---
 apiVersion: v1
 kind: Service
