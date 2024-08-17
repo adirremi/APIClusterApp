@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: fastapi
-        image: my-fastapi-image:latest
+        image: adirremi/apiclusterapp-fastapi:latest
         ports:
         - containerPort: 80
         env:
@@ -29,7 +29,7 @@ spec:
   selector:
     app: fastapi
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+  - protocol: TCP
+    port: 80
+    targetPort: 80
   type: LoadBalancer
