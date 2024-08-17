@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dbname
+    ports:
+      - "5432:5432"
+
+  fastapi:
+    build: .
+    ports:
+      - "8000:80"
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/dbname
+    depends_on:
+      - postgres
