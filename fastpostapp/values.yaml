@@ -9,6 +9,13 @@ service:
   type: LoadBalancer
   port: 80
 
+cronjob:
+  schedule: "1 0 * * *" # תזמון ה-CronJob
+  image:
+    repository: adirremi/oct7list
+    tag: "latest"
+  resources: {}
+
 postgres:
   externalHost: 34.71.236.251
   username: user
