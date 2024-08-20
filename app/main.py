@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from typing import Optional
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
@@ -20,26 +21,61 @@ async def read_table(request: Request):
         port="5432"
     )
     cur = conn.cursor()
-    cur.execute("SELECT * FROM fallen_soldiers")
+    cur.execute("SELECT DISTINCT city FROM fallen_soldiers")
+    cities = cur.fetchall()
+    cur.close()
+    conn.close()
+    
+    return templates.TemplateResponse("home.html", {"request": request, "cities": [city[0] for city in cities]})
+
+@app.get("/table", response_class=HTMLResponse)
+async def read_table(request: Request):
+    conn = psycopg2.connect(
+        host="34.71.236.251",
+        dbname="mydb",
+        user="user",
+        password="password",
+        port="5432"
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT name, age, city, description FROM fallen_soldiers")
+    #cur.execute("SELECT * FROM fallen_soldiers")
     rows = cur.fetchall()
-    headers = [desc[0] for desc in cur.description]
+    headers = ["שם", "גיל", "עיר", "תיאור"]#[desc[0] for desc in cur.description]
     cur.close()
     conn.close()
     
     return templates.TemplateResponse("table.html", {"request": request, "headers": headers, "rows": rows})
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int):
-    # Connect to the PostgreSQL database
-    conn = psycopg2.connect(DATABASE_URL)
+@app.get("/search", response_class=HTMLResponse)
+def search(request: Request, city: Optional[str] = None, name: Optional[str] = None):
+    query = "SELECT * FROM fallen_soldiers WHERE 1=1"
+    params = []
+
+    if name:
+        query += " AND name ILIKE %s"
+        params.append(f"%{name}%")
+
+    if city:
+        query += " AND city = %s"
+        params.append(city)
+
+    conn = psycopg2.connect(
+        host="34.71.236.251",
+        dbname="mydb",
+        user="user",
+        password="password",
+        port="5432"
+    )
     cur = conn.cursor()
-    cur.execute("SELECT * FROM items WHERE id = %s", (item_id,))
-    item = cur.fetchone()
+    cur.execute(query, params)
+    rows = cur.fetchall()
+    headers = ["שם", "גיל", "עיר", "תיאור"]
     cur.close()
     conn.close()
-    return {"item": item}
 
+    return templates.TemplateResponse("table.html", {"request": request, "headers": headers, "rows": rows})
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}

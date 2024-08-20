@@ -1,38 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Table</title>
+    <title>טבלת חללים ממלחמת חרבות ברזל</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
         }
         th, td {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
         }
         th {
             background-color: #f2f2f2;
         }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
-    <h2>Data Table</h2>
+    <nav>
+        <ul>
+            <li><a href="/">ראשי</a></li>
+            <li><a href="/table">טבלה מלאה</a></li>
+        </ul>
+    </nav>
+
+    <h1>חללים ממלחמת חרבות ברזל - טבלה מלאה</h1>
+
     <table>
-        <tr>
-            {% for header in headers %}
-                <th>{{ header }}</th>
-            {% endfor %}
-        </tr>
-        {% for row in rows %}
+        <thead>
             <tr>
-                {% for item in row %}
-                    <td>{{ item }}</td>
-                {% endfor %}
+                <th>שם</th>
+                <th>גיל</th>
+                <th>עיר</th>
+                <th>תיאור</th>
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row[0] }}</td> <!-- Assuming name is in column 0 -->
+                    <td>{{ row[1] }}</td> <!-- Assuming age is in column 1 -->
+                    <td>{{ row[2] }}</td> <!-- Assuming city is in column 2 -->
+                    <td>{{ row[3] }}</td> <!-- Assuming description is in column 3 -->
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

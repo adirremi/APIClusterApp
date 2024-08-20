@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>חללים ממלחמת חרבות ברזל - עמוד ראשי</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input, select, button {
+            margin-top: 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">ראשי</a></li>
+            <li><a href="/table">טבלה מלאה</a></li>
+        </ul>
+    </nav>
+
+    <h1>סקירה כללית - חללי מלחמת חרבות ברזל</h1>
+    <p>בעמוד זה תוכלו למצוא מידע על החיילים שנפלו במלחמת חרבות ברזל.</p>
+
+    <form method="get" action="/search">
+        <label for="name">חיפוש לפי שם:</label>
+        <input type="text" name="name" id="name" placeholder="הכנס שם או חלק ממנו">
+
+        <label for="city">חיפוש לפי עיר:</label>
+        <select name="city" id="city">
+            <option value="">כל הערים</option>
+            {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">חפש</button>
+    </form>
+</body>
+</html>

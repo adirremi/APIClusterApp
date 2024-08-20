@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: adirremi/apiclusterapp-fastapi
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "V1.7"
 
 service:
   type: LoadBalancer
