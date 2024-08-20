@@ -23,9 +23,9 @@ def parse_details(details):
             city = match.group(2).strip()
             return age, city
         else:
-            return None, 'Unknown'
+            return None, details.strip()
     except (ValueError, IndexError):
-        return None, 'Unknown'
+        return None, details.strip()
 
 def clean_and_split_name(name):
     """Cleans and splits the name if needed, handling 'Z"L' or other connecting words."""
