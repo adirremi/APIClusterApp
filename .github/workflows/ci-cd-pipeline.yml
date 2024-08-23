@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Backup values.yaml
         run: cp fastpostapp/values.yaml fastpostapp/values_backup.yaml
@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Bump Version
         id: bump_version
@@ -75,6 +75,9 @@ jobs:
     needs: docker
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Create GCP credentials file from Base64
         run: |
          echo "Creating GCP credentials file from Base64..."
