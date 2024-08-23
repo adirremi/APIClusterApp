@@ -79,8 +79,9 @@ jobs:
         run: |
          echo "Creating GCP credentials file from Base64..."
          echo "${{ secrets.GCP_CREDENTIALS }}" | base64 --decode > /tmp/gcp-key.json
+         
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: lsa-data-425320
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
