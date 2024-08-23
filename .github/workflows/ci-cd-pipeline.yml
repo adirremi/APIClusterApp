@@ -19,7 +19,7 @@ jobs:
           current_version=$(grep 'tag: "V' fastpostapp/values.yaml | cut -d '"' -f 2)
           new_version=$(awk -v ver="$current_version" 'BEGIN {split(ver,a,"V"); split(a[2],b,"."); b[2]++; print "V"b[1]"."b[2]}')
           echo "New version: $new_version"
-          sed -i "s/$current_version/$new_version/g" fastpostapp/values.yaml
+          sed -i "s/tag: \"$current_version\"/tag: \"$new_version\"/g" fastpostapp/values.yaml
           echo "version=$new_version" >> $GITHUB_ENV
 
   build:
