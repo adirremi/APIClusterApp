@@ -50,7 +50,9 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    needs: build
+    needs: 
+      - versioning
+      - build
 
     steps:
       - name: Echo Docker tag
@@ -67,7 +69,10 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: docker
+    needs: 
+      - versioning
+      - docker
+
 
     steps:
       - name: Create GCP credentials file from Base64
@@ -107,7 +112,10 @@ jobs:
 
   commit_changes:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: 
+      - versioning
+      - deploy
+
     if: success()
 
     steps:
