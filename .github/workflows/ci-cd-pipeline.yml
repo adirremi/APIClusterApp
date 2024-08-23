@@ -80,6 +80,12 @@ jobs:
          echo "Creating GCP credentials file from Base64..."
          echo "${{ secrets.GCP_CREDENTIALS }}" | base64 --decode > /tmp/gcp-key.json
          
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+           credentials_json: /tmp/gcp-key.json
+
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
