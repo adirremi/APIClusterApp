@@ -38,10 +38,10 @@ async def read_table(request: Request):
         port="5432"
     )
     cur = conn.cursor()
-    cur.execute("SELECT name, age, city, description FROM fallen_soldiers")
+    cur.execute("SELECT id, name, age, city, description FROM fallen_soldiers")
     #cur.execute("SELECT * FROM fallen_soldiers")
     rows = cur.fetchall()
-    headers = ["שם", "גיל", "עיר", "תיאור"]#[desc[0] for desc in cur.description]
+    headers = ["שם", "גיל", "עיר", "תיאור","id"]#[desc[0] for desc in cur.description]
     cur.close()
     conn.close()
     

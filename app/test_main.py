@@ -3,12 +3,9 @@ from main import app
 
 client = TestClient(app)
 
-def test_read_root():
-    response = client.get("/")
+def test_get_fallen_soldiers():
+    response = client.get("/table")
     assert response.status_code == 200
-    assert response.json() == {"Hello": "World"}
+    assert isinstance(response.json(), list)  # מוודא שהפלט הוא רשימה
 
-def test_read_item():
-    response = client.get("/items/1")
-    assert response.status_code == 200
-    assert "item" in response.json()
+

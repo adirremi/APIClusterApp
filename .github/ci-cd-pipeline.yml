@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Bump Version
+        id: bump_version
+        run: |
+          current_version=$(grep 'version: ' fastpostapp/Chart.yaml | cut -d ' ' -f 2)
+          new_version=$(awk -v ver="$current_version" 'BEGIN {split(ver,a,"."); a[2]++; print a[1]"."a[2]}')
+          echo "New version: $new_version"
+          sed -i "s/$current_version/$new_version/g" fastpostapp/Chart.yaml
+          sed -i "s/$current_version/$new_version/g" Dockerfile
+          echo "version=$new_version" >> $GITHUB_ENV
+
+  build:
+    runs-on: ubuntu-latest
+    needs: versioning
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t adirremi/apiclusterapp-fastapi:${{ env.version }} .
+
+      - name: Push Docker Image
+        run: docker push adirremi/apiclusterapp-fastapi:${{ env.version }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+
+    steps:
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Deploy to Kubernetes using Helm
+        run: |
+          helm upgrade --install fastpostapp ./fastpostapp --set image.repository=adirremi/apiclusterapp-fastapi --set image.tag=${{ env.version }} --set image.pullPolicy=Always
