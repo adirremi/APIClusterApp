@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
- 
 
       - name: Bump Version
         id: bump_version
@@ -23,7 +22,7 @@ jobs:
           new_tag="tag: \"$new_version\""
           sed -i "/tag: \"/c\\$new_tag" fastpostapp/values.yaml
           echo "::set-output name=version::$new_version"
-
+          echo "version=$new_version" >> $GITHUB_ENV
 
       - name: Commit and Push changes
         env:
@@ -34,9 +33,6 @@ jobs:
             git add fastpostapp/values.yaml
             git commit -m "Updated tag version in values.yaml to $new_version"
             git push https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/adirremi/APIClusterApp.git
-        
-       
-      
 
   build:
     runs-on: ubuntu-latest
@@ -65,22 +61,20 @@ jobs:
 
     steps:
       - name: Echo Docker tag
-        run: echo "Building Docker Image with tag:" "${{ env.version }}"
-    
+        run: echo "Building Docker Image with tag: ${{ env.version }}"
+
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-    
+
       - name: Build Docker Image
         run: docker build -t adirremi/apiclusterapp-fastapi:${{ env.version }} .
-    
+
       - name: Push Docker Image
         run: docker push adirremi/apiclusterapp-fastapi:${{ env.version }}
-    
 
   deploy:
     runs-on: ubuntu-latest
     needs: docker
-
 
     steps:
       - name: Install Helm
