@@ -120,6 +120,9 @@ jobs:
     if: success()
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Commit and Push changes
         env:
             GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
