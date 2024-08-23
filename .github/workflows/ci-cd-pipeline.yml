@@ -61,7 +61,7 @@ jobs:
 
     steps:
       - name: Echo Docker tag
-        run: echo "Building Docker Image with tag: ${{ env.version }}"
+        run: echo "Building Docker Image with tag:"" "${{ env.version }}"
 
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
