@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Backup values.yaml
+        run: cp fastpostapp/values.yaml fastpostapp/values_backup.yaml
+
+
+
       - name: Bump Version
         id: bump_version
         run: |
@@ -55,22 +60,25 @@ jobs:
       - name: Run tests
         run: pytest
 
-  docker:
-    runs-on: ubuntu-latest
-    needs: build
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v2
 
-    steps:
-      - name: Echo Docker tag
-        run: echo "Building Docker Image with tag:" "${{ env.version }}"
+  - name: Extract Docker tag from values.yaml
+    id: extract_tag
+    run: |
+      current_version=$(grep 'tag: "V' fastpostapp/values.yaml | cut -d '"' -f 2)
+      echo "Using Docker tag: $current_version"
+      echo "version=$current_version" >> $GITHUB_ENV
 
-      - name: Log in to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+  - name: Log in to DockerHub
+    run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build Docker Image
-        run: docker build -t adirremi/apiclusterapp-fastapi:${{ env.version }} .
+  - name: Build Docker Image
+    run: docker build -t adirremi/apiclusterapp-fastapi:${{ env.version }} .
 
-      - name: Push Docker Image
-        run: docker push adirremi/apiclusterapp-fastapi:${{ env.version }}
+  - name: Push Docker Image
+    run: docker push adirremi/apiclusterapp-fastapi:${{ env.version }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -84,3 +92,10 @@ jobs:
       - name: Deploy to Kubernetes using Helm
         run: |
           helm upgrade --install fastpostapp ./fastpostapp --set image.repository=adirremi/apiclusterapp-fastapi --set image.tag=${{ env.version }} --set image.pullPolicy=Always
+          
+  rollback:
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Restore values.yaml if any step fails
+        run: cp fastpostapp/values_backup.yaml fastpostapp/values.yaml && git add fastpostapp/values.yaml && git commit -m "Revert version bump due to failure" && git push
