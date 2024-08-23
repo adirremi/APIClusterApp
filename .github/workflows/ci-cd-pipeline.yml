@@ -63,6 +63,16 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Extract Docker tag from values.yaml
+        id: extract_tag
+        run: |
+        current_version=$(grep 'tag: "V' fastpostapp/values.yaml | cut -d '"' -f 2)
+        echo "Using Docker tag: $current_version"
+        echo "version=$current_version" >> $GITHUB_ENV
+
       - name: Echo Docker tag
         run: echo "Building Docker Image with tag:" "${{ env.version }}"
     
