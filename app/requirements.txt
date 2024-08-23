@@ -2,3 +2,4 @@ fastapi[all]
 uvicorn[standard]
 psycopg2-binary
 jinja2
+pytest
