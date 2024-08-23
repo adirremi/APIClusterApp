@@ -22,7 +22,8 @@ jobs:
           echo "New version: $new_version"
           new_tag="tag: \"$new_version\""
           sed -i "/tag: \"/c\\$new_tag" fastpostapp/values.yaml
-          echo "version=$new_version" >> $GITHUB_ENV
+          echo "::set-output name=version::$new_version"
+
 
       - name: Commit and Push changes
         env:
