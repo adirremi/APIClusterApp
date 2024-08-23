@@ -75,7 +75,6 @@ def search(request: Request, city: Optional[str] = None, name: Optional[str] = N
     cur.close()
     conn.close()
 
-
     return templates.TemplateResponse("table.html", {"request": request, "headers": headers, "rows": rows})
 @app.get("/health")
 async def health_check():
