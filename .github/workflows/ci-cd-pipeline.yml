@@ -50,13 +50,13 @@ jobs:
       - name: Bump Version
         id: bump_version
         run: |
-          current_version=$(grep 'tag: "V' fastpostapp/values.yaml | cut -d '"' -f 2)
-          new_version=$(awk -v ver="$current_version" 'BEGIN {split(ver,a,"V"); split(a[2],b,"."); b[2]++; print "V"b[1]"."b[2]}')
-          echo "New version: $new_version"
-          new_tag="tag: \"$new_version\""
-          sed -i "/tag: \"/c\\$new_tag" fastpostapp/values.yaml
-          echo "::set-output name=version::$new_version"
-          echo "version=$new_version" >> $GITHUB_ENV
+         current_version=$(grep -A 2 'repository: adirremi/apiclusterapp-fastapi' fastpostapp/values.yaml | grep 'tag: "V' | cut -d '"' -f 2)
+         new_version=$(awk -v ver="$current_version" 'BEGIN {split(ver,a,"V"); split(a[2],b,"."); b[2]++; print "V"b[1]"."b[2]}')
+         echo "New version: $new_version"
+         sed -i "/repository: adirremi\/apiclusterapp-fastapi/{n;s/tag: \"$current_version\"/tag: \"$new_version\"/}" fastpostapp/values.yaml
+         echo "::set-output name=version::$new_version"
+         echo "version=$new_version" >> $GITHUB_ENV
+
 
       - name: Echo Docker tag
         run: echo "Building Docker Image with tag:" "${{ env.version }}"
