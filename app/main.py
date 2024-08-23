@@ -50,7 +50,7 @@ async def read_table(request: Request):
 
 @app.get("/search", response_class=HTMLResponse)
 def search(request: Request, city: Optional[str] = None, name: Optional[str] = None):
-    query = "SELECT * FROM fallen_soldiers WHERE 1=1"
+    query = "SELECT name, age, city, description FROM fallen_soldiers WHERE 1=1"
     params = []
 
     if name:

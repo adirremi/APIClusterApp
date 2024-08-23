@@ -43,3 +43,16 @@ resource "google_compute_firewall" "allow_postgres" {
 
   source_ranges = ["0.0.0.0/0"]  # ניתן להחליף ב-IP ספציפי לשיפור האבטחה
 }
+
+resource "google_container_cluster" "primary" {
+  name               = "fastapi-cluster"
+  location           = "us-central1"
+  initial_node_count = 1
+
+  
+
+  node_config {
+    machine_type = var.machine_type
+  }
+}
+

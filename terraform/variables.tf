@@ -22,3 +22,7 @@ variable "db_password" {
   description = "The PostgreSQL user password"
   default     = "password"
 }
+variable "machine_type" {
+  description = "The type of machine to create"
+  default     = "e2-micro"
+}
