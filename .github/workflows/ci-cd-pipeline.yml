@@ -22,7 +22,16 @@ jobs:
           new_tag="tag: \"$new_version\""
           sed -i "/tag: \"/c\\$new_tag" fastpostapp/values.yaml
           echo "version=$new_version" >> $GITHUB_ENV
-      
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add fastpostapp/values.yaml
+          git commit -m "Updated tag version in values.yaml to $new_version"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
 
   build:
