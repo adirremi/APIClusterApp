@@ -80,7 +80,7 @@ steps:
   - name: Push Docker Image
     run: docker push adirremi/apiclusterapp-fastapi:${{ env.version }}
 
-  deploy:
+deploy:
     runs-on: ubuntu-latest
     needs: docker
 
@@ -92,7 +92,7 @@ steps:
       - name: Deploy to Kubernetes using Helm
         run: |
           helm upgrade --install fastpostapp ./fastpostapp --set image.repository=adirremi/apiclusterapp-fastapi --set image.tag=${{ env.version }} --set image.pullPolicy=Always
-          
+
   rollback:
     runs-on: ubuntu-latest
     if: failure()
