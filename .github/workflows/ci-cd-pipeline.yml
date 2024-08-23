@@ -60,6 +60,10 @@ jobs:
 
     steps:
 
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download New Version Artifact
         uses: actions/download-artifact@v2
         with:
