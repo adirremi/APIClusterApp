@@ -24,6 +24,8 @@ jobs:
           echo "New version: $new_version"
           echo $new_version > new_version.txt
           echo "::set-output name=version::$new_version"
+      - name: Copy new_version.txt to current directory
+        run: cp new_version.txt .
 
   build:
     runs-on: ubuntu-latest
