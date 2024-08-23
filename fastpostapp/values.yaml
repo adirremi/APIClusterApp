@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: adirremi/apiclusterapp-fastapi
   pullPolicy: IfNotPresent
-tag: "V1.14"
+tag: "V1.15"
 
 service:
   type: LoadBalancer
@@ -13,7 +13,7 @@ cronjob:
   schedule: "1 0 * * *" # תזמון ה-CronJob
   image:
     repository: adirremi/oct7list
-tag: "V1.14"
+tag: "V1.15"
   resources: {}
 
 postgres:
