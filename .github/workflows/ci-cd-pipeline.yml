@@ -147,14 +147,13 @@ jobs:
 
       - name: Apply New Version to values.yaml
         run: |
-           new_version=$(cat new_version.txt)
-           sed -i "/repository: adirremi/apiclusterapp-fastapi/{n;s/tag: .*/tag: \"$new_version\"/}" fastpostapp/values.yaml
-           git config --global user.name "GitHub Action"
-           git config --global user.email "action@github.com"
-           git add fastpostapp/values.yaml new_version.txt
-           git commit -m "Updated tag version in values.yaml to $new_version"
-           git push https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/adirremi/APIClusterApp.git
-
+         new_version=$(cat new_version.txt)
+         sed -i '/repository: adirremi\/apiclusterapp-fastapi/!b;n;c\  tag: "'$new_version'"' fastpostapp/values.yaml
+         git config --global user.name "GitHub Action"
+         git config --global user.email "action@github.com"
+         git add fastpostapp/values.yaml
+         git commit -m "Updated tag version in values.yaml to $new_version"
+         git push https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/adirremi/APIClusterApp.git
   rollback:
     runs-on: ubuntu-latest
     if: failure()
