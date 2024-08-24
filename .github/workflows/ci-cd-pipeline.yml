@@ -139,25 +139,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Download New Version Artifact
         uses: actions/download-artifact@v2
         with:
          name: new_version
 
-
-
-      - name: Commit and Push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          new_version=$(cat new_version.txt)
-          sed -i "/repository: adirremi\/apiclusterapp-fastapi/{n;s/tag: .*/tag: \"$new_version\"/}" fastpostapp/values.yaml
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add fastpostapp/values.yaml
-          git commit -m "Updated tag version in values.yaml to $new_version"
-          git push https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/adirremi/APIClusterApp.git
+       - name: Apply New Version to values.yaml
+         run: |
+           new_version=$(cat new_version.txt)
+           sed -i "/repository: adirremi\/apiclusterapp-fastapi/{n;s/tag: .*/tag: \"$new_version\"/}" fastpostapp/values.yaml
+           git config --global user.name "GitHub Action"
+           git config --global user.email "action@github.com"
+           git add fastpostapp/values.yaml new_version.txt
+           git commit -m "Updated tag version in values.yaml to $new_version"
+           git push https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/adirremi/APIClusterApp.git
 
   rollback:
     runs-on: ubuntu-latest
