@@ -145,8 +145,8 @@ jobs:
         with:
          name: new_version
 
-       - name: Apply New Version to values.yaml
-         run: |
+      - name: Apply New Version to values.yaml
+        run: |
            new_version=$(cat new_version.txt)
            sed -i "/repository: adirremi\/apiclusterapp-fastapi/{n;s/tag: .*/tag: \"$new_version\"/}" fastpostapp/values.yaml
            git config --global user.name "GitHub Action"
