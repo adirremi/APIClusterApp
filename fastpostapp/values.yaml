@@ -2,6 +2,7 @@ replicaCount: 2
 
 image:
   repository: adirremi/apiclusterapp-fastapi
+piclusterapp-fastapi/{n;s/tag: .*/tag: "V1.16"/}
   pullPolicy: IfNotPresent
   tag: "V1.15"
 
@@ -13,6 +14,7 @@ cronjob:
   schedule: "1 0 * * *" # תזמון ה-CronJob
   image:
     repository: adirremi/oct7list
+piclusterapp-fastapi/{n;s/tag: .*/tag: "V1.16"/}
     tag: "V2"
   resources: {}
 
