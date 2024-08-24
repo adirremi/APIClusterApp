@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: adirremi/apiclusterapp-fastapi
-  pullPolicy: IfNotPresent
+  tag: "V1.16"
   tag: "V1.15"
 
 service:
