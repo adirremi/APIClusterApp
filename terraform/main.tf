@@ -52,7 +52,7 @@ resource "google_container_cluster" "primary" {
   
 
   node_config {
-    machine_type = var.machine_type
+    machine_type = "e2-micro"
   }
 }
 
