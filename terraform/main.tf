@@ -46,13 +46,14 @@ resource "google_compute_firewall" "allow_postgres" {
 
 resource "google_container_cluster" "primary" {
   name               = "fastapi-cluster"
-  location           = "us-central1"
+  location           = "us-central1-c"
   initial_node_count = 1
+  deletion_protection = false
 
   
 
   node_config {
-    machine_type = "e2-micro"
+    machine_type = var.machine_type
   }
 }
 

@@ -3,7 +3,6 @@ replicaCount: 2
 image:
   repository: adirremi/apiclusterapp-fastapi
   tag: "V1.18"
-  tag: "V1.15"
 
 service:
   type: LoadBalancer
